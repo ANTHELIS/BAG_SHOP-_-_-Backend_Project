@@ -1,8 +1,8 @@
-const { name } = require("ejs");
 const mongoose = require("mongoose");
 
 const productSchema = mongoose.Schema({
-    img: String,
+    img: Buffer,
+    imgType: String,
     name: String,
     price: Number,
     discount: {

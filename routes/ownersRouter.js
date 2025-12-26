@@ -13,13 +13,21 @@ if(process.env.NODE_ENV==="development"){
             fullname, email, password
         });
         res.send("owner created");
-    })
+    });
 }
 
-
-
 router.get('/', (req, res)=>{
-    res.send("working");
+    res.render("ownerLogin");
 })
+router.get('/admin', (req, res)=>{
+    const success = req.flash("success");
+    res.render("createProducts", {success});
+})
+
+
+
+
+
+
 
 module.exports = router;
