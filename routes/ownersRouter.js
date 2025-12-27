@@ -1,33 +1,27 @@
 const express = require('express');
 const router = express.Router();
-const ownerModel = require('../models/ownerModel');
+const { isAdmin } = require('../middlewares/isAdmin');
+const { createOwner, loginOwner, logoutOwner } = require('../controllers/adminControllers');
 
 if(process.env.NODE_ENV==="development"){
-    router.post('/create', async (req, res)=>{
-        const owners = await ownerModel.find();
-        if(owners.length > 0){
-            return res.status(500).send("You can't create a new owner");
-        }
-        const {fullname, email, password} = req.body;
-        const owner = await ownerModel.create({
-            fullname, email, password
-        });
-        res.send("owner created");
-    });
+    router.get('/', (req, res)=>{
+        res.render("ownerRegister");
+    })
+    router.post('/create', createOwner);
 }
 
-router.get('/', (req, res)=>{
-    res.render("ownerLogin");
+router.get('/login', (req, res)=>{
+    const error = req.flash("error");
+    res.render("ownerLogin", {error});
 })
-router.get('/admin', (req, res)=>{
+router.post('/login', loginOwner)
+
+router.get('/logout', logoutOwner);
+
+router.get('/admin', isAdmin, (req, res)=>{
     const success = req.flash("success");
     res.render("createProducts", {success});
 })
-
-
-
-
-
 
 
 module.exports = router;

@@ -20,9 +20,13 @@ const userSchema = mongoose.Schema({
         minLength: [5, "Password must be at least 5 characters"],
         required: true
     },
-    cart: {
-        type: []
-    },
+    cart: [
+        {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'product'
+        }
+    ],
+    
     orders: {
         type: []
     },
