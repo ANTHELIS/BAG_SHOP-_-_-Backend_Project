@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const { isAdmin } = require('../middlewares/isAdmin');
 const { createOwner, loginOwner, logoutOwner } = require('../controllers/adminControllers');
+const ownerModel = require('../models/ownerModel');
+
 
 if(process.env.NODE_ENV==="development"){
     router.get('/', (req, res)=>{
@@ -23,5 +25,9 @@ router.get('/admin', isAdmin, (req, res)=>{
     res.render("createProducts", {success});
 })
 
+router.get('/admin/products', isAdmin, async (req, res)=>{
+    const owner = await ownerModel.findOne({email: req.owner.email}).select("-password").populate('products');
+    res.render("ownerProductsPanel", {owner});
+})
 
 module.exports = router;

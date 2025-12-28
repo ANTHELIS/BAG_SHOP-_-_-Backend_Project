@@ -16,9 +16,13 @@ const ownerSchema = mongoose.Schema({
         type: String,
         minLength: 5,
     },
-    products: {
-        type: []
-    },
+    products: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'product'
+
+        }
+    ],
     picture: String,
     gstin: Number
 })

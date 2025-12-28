@@ -10,6 +10,7 @@ module.exports.isAdmin = async (req, res, next)=>{
     try {
         const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
         const owner = await ownerModel.findOne({email: decoded.email}).select("-password");
+        req.owner = owner;
         next();
     } catch (error) {
         req.flash("error", "Something went wrong!!");
