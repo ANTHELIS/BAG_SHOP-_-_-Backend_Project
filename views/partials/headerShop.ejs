@@ -11,12 +11,21 @@
 </head>
 
 <body class="font-['Google Sans']">
-    <nav class="w-full fixed flex justify-between items-center top-0 left-0 px-5 py-3 border-white/20 bg-white/10 shadow-md backdrop-blur-md backdrop-filter">
-        <h3 class="font-['Pacifico'] text-2xl">Baggy</h3>
-        <div class="px-3 py-1 flex gap-5">
-            <a href="/shop">Shop</a>
-            <a href="/cart">Cart</a>
-            <a href="/profile">My Account</a>
-            <a class="text-red-600" href="/logout">Logout</a>
+    <nav class="w-full fixed top-0 left-0 px-5 py-3 z-50 flex justify-between items-center bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm transition-all duration-300">
+        <h3 class="font-['Pacifico'] text-2xl text-blue-600 hover:scale-105 transition-transform cursor-pointer"><a href="/shop">Baggy</a></h3>
+        <div class="flex items-center gap-6">
+            <a href="/shop" class="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors relative group">
+                Shop
+                <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full"></span>
+            </a>
+            <a href="/cart" class="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors relative group">
+                Cart
+                <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full"></span>
+            </a>
+            <a href="/profile" class="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors relative group">
+                My Account
+                <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full"></span>
+            </a>
+            <a class="px-4 py-2 rounded-full bg-red-50 text-red-600 text-sm font-medium hover:bg-red-100 transition-colors" href="/logout">Logout</a>
         </div>
     </nav>

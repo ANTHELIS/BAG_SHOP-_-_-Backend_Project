@@ -1,25 +1,63 @@
 <%- include('./partials/headerOwner') %>
-    <div class="w-full h-screen flex px-20">
-        <div class="w-1/2 flex items-center justify-center h-screen">
-            <div class="w-full px-32">
-                <h4 class="text-2xl capitalize mb-5">Admin Account Center</h4>
-                <form action="/owners/admin/profile" method="post" enctype="multipart/form-data">
-                    <div class="flex">
-                        <div class="w-20 h-20  rounded-full mb-5 inline-block">
-                            <% if(owner.img && owner.imgType){ %>
-                                <img class="h-full w-full object-cover rounded-full" src="data:image/<%=owner.imgType%>;base64,<%= owner.img.toString('base64') %>" alt="">
-                            <% } else{ %>
-                                <img class="h-full w-full object-cover rounded-full" src="/images/profile/profilePic.jpg" alt="">
-                            <% } %>
-                        </div>
-                        <div class="mb-4">
-                            <input name="ownerPic" type="file" class="py-2 px-4 rounded" value="Select File">
+    <div class="w-full min-h-screen bg-gray-50 pt-24 pb-10 px-4 sm:px-10 flex justify-center">
+        <div class="w-full max-w-3xl bg-white rounded-2xl shadow-lg overflow-hidden">
+            <div class="bg-gray-900 h-32 w-full relative">
+                <div class="absolute -bottom-16 left-8 sm:left-12">
+                    <div class="w-32 h-32 rounded-full border-4 border-white bg-white overflow-hidden shadow-md relative group">
+                        <% if(owner.img && owner.imgType){ %>
+                            <img class="h-full w-full object-cover" src="data:image/<%=owner.imgType%>;base64,<%= owner.img.toString('base64') %>" alt="Profile">
+                        <% } else{ %>
+                            <img class="h-full w-full object-cover" src="/images/profile/profilePic.jpg" alt="Profile">
+                        <% } %>
+                        
+                        <!-- Overlay for image upload hint -->
+                        <div class="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                            <i class="ri-camera-line text-white text-2xl"></i>
                         </div>
                     </div>
-                    <input class="block bg-zinc-100 w-full px-3 py-2 border-[1px] text-zinc-500 rounded-md mb-3 border-zinc-200 outline-hidden" type="email" placeholder="Email" value="<%= owner.email %>" readonly>
-                    <input class="block bg-zinc-100 w-full px-3 py-2 border-[1px] rounded-md mb-3 border-zinc-200" type="text" placeholder="Fullname" name="fullname" value="<%= owner.fullname %>">
-                    <input class="block bg-zinc-100 w-full px-3 py-2 border-[1px] rounded-md mb-3 border-zinc-200" type="text" placeholder="GST no." name="gstin" value="<%= owner.gstin %>">
-                    <input class="px-5 rounded-full py-3 mt-2 bg-yellow-600 cursor-pointer text-white" type="submit" value="Update">
+                </div>
+            </div>
+            
+            <div class="pt-20 px-8 sm:px-12 pb-12">
+                <div class="flex justify-between items-center mb-8">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-800"><%= owner.fullname %></h1>
+                        <p class="text-gray-500"><%= owner.email %></p>
+                        <span class="inline-block mt-2 px-3 py-1 bg-gray-100 text-gray-600 text-xs font-semibold rounded-full uppercase tracking-wide">Administrator</span>
+                    </div>
+                </div>
+
+                <form action="/owners/admin/profile" method="post" enctype="multipart/form-data" class="space-y-6">
+                    <!-- Profile Image Input (Hidden but functional) -->
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Update Profile Picture</label>
+                        <input name="ownerPic" type="file" class="block w-full text-sm text-gray-500
+                            file:mr-4 file:py-2 file:px-4
+                            file:rounded-full file:border-0
+                            file:text-sm file:font-semibold
+                            file:bg-gray-200 file:text-gray-700
+                            hover:file:bg-gray-300
+                            transition-colors
+                        ">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                        <input class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-gray-500 focus:border-gray-500 outline-none transition-all" 
+                            type="text" placeholder="Fullname" name="fullname" value="<%= owner.fullname %>">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">GSTIN Number</label>
+                        <input class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-gray-500 focus:border-gray-500 outline-none transition-all" 
+                            type="text" placeholder="GST no." name="gstin" value="<%= owner.gstin %>">
+                    </div>
+
+                    <div class="flex justify-end pt-6">
+                        <button class="px-8 py-3 bg-gray-900 hover:bg-black text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200" type="submit">
+                            Update Profile
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>

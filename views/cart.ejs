@@ -1,76 +1,109 @@
 <%- include('./partials/headerShop') %>
-    <div class="w-full h-screen flex items-start p-20 justify-between">
+    <div class="w-full min-h-screen bg-gray-50 pt-24 pb-10 px-4 sm:px-10">
+        <h1 class="text-3xl font-bold text-gray-800 mb-8">Shopping Cart</h1>
+        
         <% if(user.cart.length>0){ %>
-            <div class="products flex flex-col w-[30%]">
-                <!-- product  -->
-                <% user.cart.forEach((product)=>{ %>
-                    <div class="product w-full mb-10 rounded-md overflow-hidden">
-                        <div class="w-full flex justify-center items-center h-60 bg-[<%= product.bgcolor %>]">
-                            <img class="h-[15rem]  object-cover" src="data:image/<%=product.imgType%>;base64,<%= product.img.toString('base64') %>" alt="">
-                        </div>
-                        <div class="w-full flex justify-between bg-[#e9e9e9] px-5 py-4">
-                            <h3 class="text-2xl"><%= product.name %></h3>
-                            <div class="flex items-center gap-2">
-                                <i class="w-7 h-7 bg-white flex rounded-full items-center justify-center ri-add-line"></i>
-                                <div class="px-2 py-1 rounded-md bg-white text-black">01</div>
-                                <i class="w-7 h-7 bg-white flex rounded-full items-center justify-center ri-subtract-line"></i>
-                            </div>
-                        </div>
-                        <div class="flex items-center bg-[#e9e9e9] justify-between px-5 py-1">
-                            <h4 class="text-lg">Acctual Price</h4>
-                            <h2 class="text-lg">₹ <%= product.price %></h2>
-                        </div>
-                        <% if(product.discount !== 0){ %>
-                            <div class="flex bg-[#e9e9e9] items-center justify-between px-5 py-1">
-                                <h4 class="text-lg">Discount</h4>
-                                <h2 class="text-lg">₹ <%= product.discount %></h2>
-                            </div>
-                        <% } %>
-                        <div class="flex bg-[#e9e9e9] items-center justify-between px-5 py-1">
-                            <h4 class="text-lg">Net Total</h4>
-                            <h2 class="text-lg">₹ <%= product.price - product.discount %></h2>
-                        </div>
-                    </div>
-                <% }) %>
-            </div>
-            <div class="w-[50%] bg-[#f5f5f5] p-5 rounded-xl fixed top-20 right-20">
-                <h3 class="text-xl">Price Breakdown</h3>
-                <div class="px-10 mt-5">
-                    <% var totalPrice = 0 %>
-                    <% var totalDiscount = 0 %>
+            <div class="flex flex-col lg:flex-row gap-8 items-start">
+                <!-- Cart Items -->
+                <div class="w-full lg:w-[65%] flex flex-col gap-4">
                     <% user.cart.forEach((product)=>{ %>
-                        <% totalPrice = totalPrice + product.price %>
-                        <% totalDiscount = totalDiscount + product.discount %>
+                        <div class="flex flex-col sm:flex-row items-center bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden p-4 gap-4 transition-all hover:shadow-md">
+                            <!-- Image -->
+                            <div class="w-full sm:w-32 h-32 flex-shrink-0 flex items-center justify-center bg-[<%= product.bgcolor %>] rounded-lg">
+                                <img class="h-24 object-contain" src="data:image/<%=product.imgType%>;base64,<%= product.img.toString('base64') %>" alt="<%= product.name %>">
+                            </div>
+                            
+                            <!-- Details -->
+                            <div class="flex-grow w-full flex flex-col justify-between h-full gap-2">
+                                <div class="flex justify-between items-start">
+                                    <h3 class="text-xl font-semibold text-gray-800"><%= product.name %></h3>
+                                    <button class="text-gray-400 hover:text-red-500 transition-colors">
+                                        <i class="ri-delete-bin-line text-xl"></i>
+                                    </button>
+                                </div>
+                                
+                                <div class="flex justify-between items-end mt-2">
+                                    <div class="flex items-center gap-3 bg-gray-50 rounded-lg p-1 border border-gray-200">
+                                        <button class="w-8 h-8 flex items-center justify-center bg-white rounded-md shadow-sm hover:bg-gray-100 text-gray-600 transition-colors">
+                                            <i class="ri-subtract-line"></i>
+                                        </button>
+                                        <span class="font-medium text-gray-700 w-4 text-center">1</span>
+                                        <button class="w-8 h-8 flex items-center justify-center bg-white rounded-md shadow-sm hover:bg-gray-100 text-gray-600 transition-colors">
+                                            <i class="ri-add-line"></i>
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="text-right">
+                                        <div class="flex items-baseline gap-2 justify-end">
+                                            <span class="text-lg font-bold text-gray-900">₹ <%= product.price - product.discount %></span>
+                                            <% if(product.discount > 0){ %>
+                                                <span class="text-sm text-gray-400 line-through">₹ <%= product.price %></span>
+                                            <% } %>
+                                        </div>
+                                        <% if(product.discount > 0){ %>
+                                            <span class="text-xs text-green-600 font-medium">You save ₹ <%= product.discount %></span>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     <% }) %>
-                    <div class="flex mt-2">
-                        <h4 class="w-1/3">Total MRP</h4>
-                        <h4>₹ <%= totalPrice %></h4>
-                    </div>
-                    <div class="flex mt-2">
-                        <h4 class="w-1/3">Discount on MRP</h4>
-                        <h4>₹ <%= totalDiscount %></h4>
-                    </div>
-                    <div class="flex mt-2">
-                        <h4 class="w-1/3">Platform Fee</h4>
-                        <h4>₹ 20</h4>
-                    </div>
-                    <div class="flex mt-2">
-                        <h4 class="w-1/3">Shipping Fee</h4>
-                        <h4>FREE</h4>
-                    </div>
                 </div>
-                <div class="w-full h-[1px] bg-black mt-10"></div>
-                <div class="flex mt-5">
-                    <h3 class="w-1/3 text-xl">Total Amount</h3>
-                    <h3 class="font-semibold text-xl text-green-600">₹ <%= totalPrice - totalDiscount + 20 %></h3>
-                </div>
-                <form action=""></form>
-            </div>
 
+                <!-- Order Summary -->
+                <div class="w-full lg:w-[35%] sticky top-24">
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-6">Order Summary</h3>
+                        
+                        <% var totalPrice = 0 %>
+                        <% var totalDiscount = 0 %>
+                        <% user.cart.forEach((product)=>{ %>
+                            <% totalPrice = totalPrice + product.price %>
+                            <% totalDiscount = totalDiscount + product.discount %>
+                        <% }) %>
+                        
+                        <div class="space-y-3 mb-6">
+                            <div class="flex justify-between text-gray-600">
+                                <span>Total MRP</span>
+                                <span>₹ <%= totalPrice %></span>
+                            </div>
+                            <div class="flex justify-between text-green-600">
+                                <span>Discount on MRP</span>
+                                <span>- ₹ <%= totalDiscount %></span>
+                            </div>
+                            <div class="flex justify-between text-gray-600">
+                                <span>Platform Fee</span>
+                                <span>₹ 20</span>
+                            </div>
+                            <div class="flex justify-between text-gray-600">
+                                <span>Shipping Fee</span>
+                                <span class="text-green-600">FREE</span>
+                            </div>
+                        </div>
+                        
+                        <div class="border-t border-dashed border-gray-200 pt-4 mb-6">
+                            <div class="flex justify-between items-center">
+                                <span class="text-lg font-bold text-gray-800">Total Amount</span>
+                                <span class="text-xl font-bold text-gray-900">₹ <%= totalPrice - totalDiscount + 20 %></span>
+                            </div>
+                        </div>
+                        
+                        <button class="w-full py-3 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors shadow-md hover:shadow-lg transform hover:-translate-y-0.5 duration-200">
+                            Proceed to Checkout
+                        </button>
+                    </div>
+                </div>
+            </div>
         <% } else { %>
-            <div class="block">
-                <div class="text-zinc-500 mb-10">Your cart is empty</div>
-                <a class="bg-gray-700 text-white px-6 py-2 rounded-lg"  href="/shop">Shop Now</a>
+            <div class="flex flex-col items-center justify-center h-[60vh] text-center">
+                <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                    <i class="ri-shopping-cart-line text-4xl text-gray-400"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Your cart is empty</h2>
+                <p class="text-gray-500 mb-6">Looks like you haven't added anything to your cart yet.</p>
+                <a href="/shop" class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-md">
+                    Start Shopping
+                </a>
             </div>
         <% } %>
     </div>
