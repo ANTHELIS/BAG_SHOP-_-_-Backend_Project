@@ -1,0 +1,27 @@
+<%- include('./partials/headerOwner') %>
+    <div class="w-full h-screen flex px-20">
+        <div class="w-1/2 flex items-center justify-center h-screen">
+            <div class="w-full px-32">
+                <h4 class="text-2xl capitalize mb-5">Admin Account Center</h4>
+                <form action="/owners/admin/profile" method="post" enctype="multipart/form-data">
+                    <div class="flex">
+                        <div class="w-20 h-20  rounded-full mb-5 inline-block">
+                            <% if(owner.img && owner.imgType){ %>
+                                <img class="h-full w-full object-cover rounded-full" src="data:image/<%=owner.imgType%>;base64,<%= owner.img.toString('base64') %>" alt="">
+                            <% } else{ %>
+                                <img class="h-full w-full object-cover rounded-full" src="/images/profile/profilePic.jpg" alt="">
+                            <% } %>
+                        </div>
+                        <div class="mb-4">
+                            <input name="ownerPic" type="file" class="py-2 px-4 rounded" value="Select File">
+                        </div>
+                    </div>
+                    <input class="block bg-zinc-100 w-full px-3 py-2 border-[1px] text-zinc-500 rounded-md mb-3 border-zinc-200 outline-hidden" type="email" placeholder="Email" value="<%= owner.email %>" readonly>
+                    <input class="block bg-zinc-100 w-full px-3 py-2 border-[1px] rounded-md mb-3 border-zinc-200" type="text" placeholder="Fullname" name="fullname" value="<%= owner.fullname %>">
+                    <input class="block bg-zinc-100 w-full px-3 py-2 border-[1px] rounded-md mb-3 border-zinc-200" type="text" placeholder="GST no." name="gstin" value="<%= owner.gstin %>">
+                    <input class="px-5 rounded-full py-3 mt-2 bg-yellow-600 cursor-pointer text-white" type="submit" value="Update">
+                </form>
+            </div>
+        </div>
+    </div>
+    <%- include('./partials/footer') %>

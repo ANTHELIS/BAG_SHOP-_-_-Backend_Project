@@ -30,12 +30,22 @@ const userSchema = mongoose.Schema({
     orders: {
         type: []
     },
-    picture: String,
+    img: {
+    type: Buffer,
+    default: null
+    },
+    imgType: String,
     address: {
-        type: Object,
         flat: String,
         area: String,
-        contact: Number
+        city: String,
+        state: String,
+        pincode: Number,
+        country: {
+            type: String,
+            default: "India"
+        },
+        contact: String
     }
 })
 

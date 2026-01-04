@@ -11,7 +11,23 @@ module.exports.userLoginPage = (req, res)=>{
 };
 
 module.exports.shopPage = async (req, res)=>{
-    const products = await productModel.find();
+    let products;
+    const sortby = req.query.sortby;
+    const filter = req.query.filter;
+    if(filter==='availability'){
+        res.redirect('/shop');
+    }
+
+    else if(filter==='discount'){
+        products = await productModel.find({discount: {$gt: 0}}).sort({discount: -1});
+    }
+    else if(sortby==='newest'){
+        products = await productModel.find().sort({ createdAt: -1 });
+    }
+    else{
+        products = await productModel.find();
+    }
+    console.log(req.query);
     const success = req.flash("success");
     res.render("shop", {products, success});
 };

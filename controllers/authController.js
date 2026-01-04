@@ -23,7 +23,7 @@ module.exports.registerUser = (req, res)=>{
                     });
                     const token = generateToken(user);
                     res.cookie('token', token);
-                    res.send(user);
+                    res.redirect('/shop');
                 };
             });
         });

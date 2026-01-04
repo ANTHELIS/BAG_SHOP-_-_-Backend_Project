@@ -20,10 +20,13 @@ const ownerSchema = mongoose.Schema({
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'product'
-
         }
     ],
-    picture: String,
+    img: {
+        type: Buffer,
+        default: null,
+    },
+    imgType: String,
     gstin: Number
 })
 

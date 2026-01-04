@@ -12,6 +12,10 @@ const productSchema = mongoose.Schema({
     bgcolor: String,
     panelcolor: String,
     textcolor: String,
+    createdAt: {
+        type: Date,
+        default: Date.now()
+    }
 })
 
 const product = mongoose.model('product', productSchema);

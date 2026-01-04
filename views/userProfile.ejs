@@ -1,0 +1,30 @@
+<%- include('./partials/headerShop') %>
+    <div class="w-full h-screen flex px-20">
+        <div class="w-1/2 flex items-center justify-center h-screen">
+            <div class="w-full px-32">
+                <h4 class="text-2xl capitalize mb-5">Profile Details</h4> 
+                <form action="/profile/edit" method="post" enctype="multipart/form-data">
+                    <div class="w-20 h-20 rounded-full inline-block">
+                        <% if(user.img && user.imgType){ %>
+                            <img class="h-full w-full object-cover rounded-full" src="data:image/<%=user.imgType%>;base64,<%= user.img.toString('base64') %>" alt="">
+                        <% } else{ %>
+                            <img class="h-full w-full object-cover rounded-full" src="/images/profile/userPic.jpg" alt="">
+                        <% } %>
+                    </div>
+                    <div class="mb-2">
+                        <input name="userPic" type="file" class="py-2 px-4 rounded" value="Select File">
+                    </div>
+                    <input class="block bg-zinc-100 w-full px-3 py-2 border-[1px] text-zinc-500 rounded-md mb-3 border-zinc-200 outline-hidden" type="email" placeholder="Email" value="<%= user.email %>" readonly>
+                    <input class="block bg-zinc-100 w-full px-3 py-2 border-[1px] rounded-md mb-3 border-zinc-200" type="text" placeholder="Fullname" name="fullname" value="<%= user.fullname %>">
+                    <input class="block bg-zinc-100 w-full px-3 py-2 border-[1px] rounded-md mb-3 border-zinc-200" type="text" placeholder="Flat/House/building name" name="flat" value="<%= user.address.flat %>">
+                    <input class="block bg-zinc-100 w-full px-3 py-2 border-[1px] rounded-md mb-3 border-zinc-200" type="text" placeholder="Area/Sector/Locality" name="area" value="<%= user.address.area %>">
+                    <input class="block bg-zinc-100 w-full px-3 py-2 border-[1px] rounded-md mb-3 border-zinc-200" type="text" placeholder="City" name="city" value="<%= user.address.city %>">
+                    <input class="block bg-zinc-100 w-full px-3 py-2 border-[1px] rounded-md mb-3 border-zinc-200" type="text" placeholder="State" name="state" value="<%= user.address.state %>">
+                    <input class="block bg-zinc-100 w-full px-3 py-2 border-[1px] rounded-md mb-3 border-zinc-200" type="text" placeholder="Pincode" name="pincode" value="<%= user.address.pincode %>">
+                    <input class="block bg-zinc-100 w-full px-3 py-2 border-[1px] rounded-md mb-3 border-zinc-200" type="text" placeholder="10-digit mobile number" name="contact" value="<%= user.address.contact %>">
+                    <input class="px-5 rounded-full py-3 mt-2 bg-blue-600 cursor-pointer text-white" type="submit" value="Save">
+                </form>
+            </div>
+        </div>
+    </div>
+    <%- include('./partials/footer') %>
