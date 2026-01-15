@@ -1,0 +1,107 @@
+<%- include('./partials/headerShop') %>
+
+        <div class="w-full min-h-screen bg-gray-50 pt-24 pb-10 px-4 sm:px-10">
+            <!-- Header Section -->
+            <div class="max-w-6xl mx-auto mb-8 flex justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-800">My Orders</h1>
+                    <p class="text-gray-500 mt-1 text-sm">View and track your recent purchases</p>
+                </div>
+            </div>
+
+            <% if(typeof orders !== 'undefined' && orders.length > 0){ %>
+                <div class="max-w-6xl mx-auto space-y-6">
+                    <% orders.forEach((order)=>{ %>
+                        <!-- Single Order Card -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-300">
+                            
+                            <!-- Order Header Info -->
+                            <div class="bg-gray-50/50 px-6 py-4 border-b border-gray-100 flex flex-wrap gap-y-4 justify-between items-center">
+                                <div class="flex gap-10 text-sm">
+                                    <div>
+                                        <p class="text-gray-500 font-medium uppercase text-xs tracking-wider">Order Placed</p>
+                                        <p class="text-gray-900 font-semibold mt-0.5"><%= new Date(order.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) %>
+                                            at <%= new Date(order.createdAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) %>
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-500 font-medium uppercase text-xs tracking-wider">Total Amount</p>
+                                        <p class="text-gray-900 font-semibold mt-0.5">₹ <%= order.totalAmmount %></p>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-500 font-medium uppercase text-xs tracking-wider">Ship To</p>
+                                        <p class="text-gray-900 font-semibold mt-0.5"><%= order.fullname %></p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="text-xs font-mono text-gray-400">ORDER #<%= order._id.toString().slice(-6).toUpperCase() %></span>
+                                    <!-- Status Badge -->
+                                    <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide
+                                        <%= order.orderStatus === 'delivered' ? 'bg-green-100 text-green-700' : 
+                                           order.orderStatus === 'cancelled' ? 'bg-red-100 text-red-700' : 
+                                           order.orderStatus === 'shipped' ? 'bg-blue-100 text-blue-700' : 
+                                           'bg-yellow-100 text-yellow-700' %>">
+                                        <%= order.orderStatus %>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Order Products List -->
+                            <div class="p-6">
+                                <% order.products.forEach((item)=>{ %>
+                                    <div class="flex gap-5 mb-5 last:mb-0">
+                                        <!-- Product Image -->
+                                        <div class="w-20 h-20 flex-shrink-0 bg-[<%= item.product.bgcolor %>] rounded-lg flex items-center justify-center p-2 border border-gray-100">
+                                            <img class="w-full h-full object-contain" 
+                                                 src="data:image/<%= item.product.imgType %>;base64,<%= item.product.img.toString('base64') %>" 
+                                                 alt="<%= item.product.name %>">
+                                        </div>
+                                        
+                                        <!-- Product Details -->
+                                        <div class="flex-grow flex flex-col justify-center">
+                                            <h4 class="text-lg font-bold text-gray-800 leading-tight"><%= item.product.name %></h4>
+                                            
+                                            <div class="flex items-center gap-4 mt-2 text-sm text-gray-500">
+                                                <span class="bg-gray-100 px-2 py-0.5 rounded text-gray-600">Qty: <%= item.quantity %></span>
+                                                <span>Price: ₹ <%= item.price %></span>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Item Total -->
+                                        <div class="flex items-center">
+                                            <p class="font-bold text-gray-900 text-lg">₹ <%= item.price * item.quantity %></p>
+                                        </div>
+                                    </div>
+                                <% }) %>
+                            </div>
+
+                            <!-- Order Footer Actions -->
+                            <div class="bg-gray-50 px-6 py-3 border-t border-gray-100 flex justify-between items-center">
+                                <div class="flex items-center gap-2 text-sm text-gray-500">
+                                    <div class="w-2 h-2 rounded-full <%= order.paymentStatus === 'paid' ? 'bg-green-500' : 'bg-orange-500' %>"></div>
+                                    Payment: <span class="font-medium text-gray-700 uppercase"><%= order.paymentMethod %></span>
+                                </div>
+                                <% if(order.deliveryDate) { %>
+                                    <div class="flex items-center gap-2 text-sm text-gray-700">
+                                        Delivery by <span class="font-medium text-gray-700 uppercase"><%= new Date(order.deliveryDate).toLocaleDateString('en-IN', {day: 'numeric', month: 'short', year: 'numeric'})  %></span>
+                                    </div>
+                                <% } %>
+                                
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            <% } else { %>
+                <!-- Empty State -->
+                <div class="max-w-md mx-auto mt-20 text-center">
+                    <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="ri-shopping-bag-3-line text-3xl text-gray-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">No Orders Yet</h3>
+                    <p class="text-gray-500 mb-8">Looks like you haven't made any purchases yet. Go ahead and explore our collection!</p>
+                    <a href="/shop" class="inline-block px-8 py-3 bg-black text-white rounded-lg font-semibold hover:bg-gray-800 transition-all">Start Shopping</a>
+                </div>
+            <% } %>
+
+        </div>
+<%- include('./partials/footer') %>

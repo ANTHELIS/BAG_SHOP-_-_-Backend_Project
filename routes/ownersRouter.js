@@ -5,6 +5,7 @@ const { createOwner, loginOwner, logoutOwner } = require('../controllers/adminCo
 const ownerModel = require('../models/ownerModel');
 const upload = require('../config/multerConfig');
 const path = require('path');
+const orderModel = require('../models/orderModel');
 
 
 if(process.env.NODE_ENV==="development"){
@@ -48,6 +49,24 @@ router.post('/admin/profile', isAdmin, upload.single('ownerPic'), async(req, res
     await req.owner.save();
 
     res.redirect('/owners/admin/profile'); 
+})
+router.get('/admin/orders', isAdmin, async(req, res)=>{
+    const owner = await ownerModel.findOne().select('orders').populate({
+        path: 'orders',
+        populate: {
+            path: 'user',
+            path: 'products.product'
+        }
+    })
+    const orders = owner.orders;
+    res.render('ownerMyOrder', {orders});
+})
+router.post('/admin/ordersUpdate/:order_id', isAdmin, async(req, res)=>{
+    const {deliveryDate, orderStatus} = req.body;
+    await orderModel.findByIdAndUpdate(req.params.order_id, { deliveryDate, orderStatus });
+    res.redirect('/owners/admin/orders');
+
+
 })
 
 

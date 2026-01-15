@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const registerValidation = require("../middlewares/registerValidation");
 const {registerUser, loginUser, logout} = require('../controllers/authController');
-const {userRegisterPage, userLoginPage, shopPage, addToCart, cart} = require("../controllers/pageController");
+const {userRegisterPage, userLoginPage, shopPage, addToCart, cart, deleteFromCart, addQuantity, decQuantity, orderCheckout, placeOrder, myOrder} = require("../controllers/pageController");
 const { isLoggedIn } = require('../middlewares/isLoggedIn');
 const userModel = require('../models/userModel');
 const path = require('path');
@@ -15,7 +15,16 @@ router.get("/login", userLoginPage);
 router.get("/", userRegisterPage);
 router.get("/shop", isLoggedIn, shopPage);
 router.get("/addtocart/:product_id", isLoggedIn, addToCart);
+router.get("/deletecartitem/:product_id", isLoggedIn, deleteFromCart);
+router.get("/addquantity/:product_id", isLoggedIn, addQuantity);
+router.get("/decquantity/:product_id", isLoggedIn, decQuantity);
 router.get("/cart", isLoggedIn, cart);
+router.get("/checkout", isLoggedIn, orderCheckout);
+router.post("/placeorder", isLoggedIn, placeOrder);
+router.get("/myorder", isLoggedIn, myOrder);
+
+
+
 router.get("/profile", isLoggedIn, (req, res)=>{
     const user = req.user
     res.render('userProfile', { user });

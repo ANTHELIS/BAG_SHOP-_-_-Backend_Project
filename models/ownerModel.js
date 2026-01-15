@@ -22,6 +22,10 @@ const ownerSchema = mongoose.Schema({
             ref: 'product'
         }
     ],
+    orders: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'order'
+    }],
     img: {
         type: Buffer,
         default: null,
