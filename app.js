@@ -36,8 +36,22 @@ app.use("/owners", ownersRouter);
 app.use("/products", productsRouter);
 // app.use("/payment", paymentRouter);
 
+// 404 handler - must be after all routes
+app.use((req, res, next) => {
+    res.status(404).send(`
+        <html>
+            <head><title>404 - Not Found</title></head>
+            <body style="font-family: Arial; text-align: center; padding: 50px;">
+                <h1>404 - Page Not Found</h1>
+                <p>The page you're looking for doesn't exist.</p>
+                <a href="/" style="color: blue;">Go to Home</a>
+            </body>
+        </html>
+    `);
+});
 
 
 app.listen(PORT, ()=>{
     dbgr(`Server is running on port ${PORT}`);
+    console.log(`🚀 Server is running on port ${PORT}`);
 })
