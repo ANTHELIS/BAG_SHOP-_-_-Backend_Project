@@ -6,7 +6,8 @@ const dotenv = require('dotenv')
 dotenv.config()
 const connectToDB = require('./config/db');
 connectToDB();
-const PORT = config.get("PORT") || 3000 ;
+// Use environment variable first, then config, then default to 3000
+const PORT = process.env.PORT || (config.has("PORT") ? config.get("PORT") : null) || 3000;
 const cookieParser = require('cookie-parser');
 const path = require('path');
 const expressSession = require("express-session");
