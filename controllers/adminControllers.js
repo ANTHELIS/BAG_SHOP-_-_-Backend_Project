@@ -18,7 +18,7 @@ module.exports.createOwner = async (req, res)=>{
                 email,
                 password: hash,
               });
-              res.redirect("/owners/admin");
+              res.redirect("/owners/admin/products");
             });
           });
         } catch (err) {

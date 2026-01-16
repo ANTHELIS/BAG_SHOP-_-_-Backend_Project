@@ -9,7 +9,14 @@
             <% } %>
             
             <div class="w-full min-h-screen flex items-start px-4 sm:px-10 py-24 bg-gray-50">
-                <!-- Sidebar -->
+                <!-- Mobile Filter Toggle -->
+                <div class="md:hidden w-full mb-6">
+                    <button id="mobile-filter-btn" class="w-full py-3 bg-white border border-gray-200 rounded-lg shadow-sm text-gray-700 font-medium flex items-center justify-center gap-2">
+                        <i class="ri-filter-3-line"></i> Filters & Sort
+                    </button>
+                </div>
+
+                <!-- Desktop Sidebar -->
                 <div class="w-[20%] hidden md:flex flex-col items-start sticky top-24 h-[calc(100vh-6rem)] overflow-y-auto pr-6 border-r border-gray-200">
                     <div class="w-full mb-8">
                         <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3">Sort by</h3>
@@ -35,8 +42,47 @@
                     </div>
                 </div>
 
+                <!-- Mobile Filter Drawer (Overlay) -->
+                <div id="mobile-filter-drawer" class="fixed inset-0 z-[60] hidden">
+                    <!-- Backdrop -->
+                    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" id="mobile-filter-backdrop"></div>
+                    <!-- Drawer Content -->
+                    <div class="absolute right-0 top-0 h-full w-[80%] max-w-sm bg-white shadow-2xl p-6 overflow-y-auto transform transition-transform duration-300 translate-x-full" id="mobile-filter-content">
+                        <div class="flex justify-between items-center mb-8">
+                            <h2 class="text-xl font-bold text-gray-800">Filters & Sort</h2>
+                            <button id="close-filter-btn" class="p-2 rounded-full hover:bg-gray-100 transition-colors">
+                                <i class="ri-close-line text-2xl"></i>
+                            </button>
+                        </div>
+
+                        <div class="w-full mb-8">
+                            <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3">Sort by</h3>
+                            <form action="/shop" class="w-full">
+                                <select class="w-full border border-gray-300 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-700 text-base" name="sortby" onchange="this.form.submit()">
+                                    <option value="popular">Popular</option>
+                                    <option value="newest">Newest</option>
+                                </select>
+                            </form>
+                        </div>
+                        
+                        <div class="w-full mb-8">
+                            <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3">Categories</h3>
+                            <a class="block w-full py-3 px-3 rounded-lg hover:bg-gray-100 text-gray-700 font-medium transition-all duration-200" href="/shop">All Products</a>
+                        </div>
+
+                        <div class="w-full">
+                            <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3">Filter by</h3>
+                            <div class="space-y-1">
+                                <a class="block w-full py-3 px-3 rounded-lg hover:bg-gray-100 text-gray-700 font-medium transition-all duration-200" href="/shop?filter=availability">Availability</a>
+                                <a class="block w-full py-3 px-3 rounded-lg hover:bg-gray-100 text-gray-700 font-medium transition-all duration-200" href="/shop?filter=discount">Discount</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Main Content -->
                 <div class="w-full md:w-[80%] flex flex-col gap-5 pl-0 md:pl-8">
+
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         <% products.forEach((product)=>{ %>
                             <div class="group relative bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col h-full">
@@ -75,4 +121,29 @@
                     <% } %>
                 </div>
             </div>
+            <script>
+                const mobileFilterBtn = document.getElementById('mobile-filter-btn');
+                const mobileFilterDrawer = document.getElementById('mobile-filter-drawer');
+                const closeFilterBtn = document.getElementById('close-filter-btn');
+                const mobileFilterBackdrop = document.getElementById('mobile-filter-backdrop');
+                const mobileFilterContent = document.getElementById('mobile-filter-content');
+
+                function openDrawer() {
+                    mobileFilterDrawer.classList.remove('hidden');
+                    setTimeout(() => {
+                        mobileFilterContent.classList.remove('translate-x-full');
+                    }, 10);
+                }
+
+                function closeDrawer() {
+                    mobileFilterContent.classList.add('translate-x-full');
+                    setTimeout(() => {
+                        mobileFilterDrawer.classList.add('hidden');
+                    }, 300);
+                }
+
+                mobileFilterBtn.addEventListener('click', openDrawer);
+                closeFilterBtn.addEventListener('click', closeDrawer);
+                mobileFilterBackdrop.addEventListener('click', closeDrawer);
+            </script>
             <%- include('./partials/footer') %>

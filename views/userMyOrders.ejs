@@ -16,25 +16,24 @@
                         <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-300">
                             
                             <!-- Order Header Info -->
-                            <div class="bg-gray-50/50 px-6 py-4 border-b border-gray-100 flex flex-wrap gap-y-4 justify-between items-center">
-                                <div class="flex gap-10 text-sm">
-                                    <div>
+                            <div class="bg-gray-50/50 px-4 sm:px-6 py-4 border-b border-gray-100 flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
+                                <div class="flex flex-wrap gap-x-8 gap-y-4 text-sm w-full md:w-auto">
+                                    <div class="flex-1 min-w-[100px]">
                                         <p class="text-gray-500 font-medium uppercase text-xs tracking-wider">Order Placed</p>
                                         <p class="text-gray-900 font-semibold mt-0.5"><%= new Date(order.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) %>
-                                            at <%= new Date(order.createdAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) %>
                                         </p>
                                     </div>
-                                    <div>
-                                        <p class="text-gray-500 font-medium uppercase text-xs tracking-wider">Total Amount</p>
+                                    <div class="flex-1 min-w-[80px]">
+                                        <p class="text-gray-500 font-medium uppercase text-xs tracking-wider">Total</p>
                                         <p class="text-gray-900 font-semibold mt-0.5">₹ <%= order.totalAmmount %></p>
                                     </div>
-                                    <div>
+                                    <div class="flex-1 min-w-[100px]">
                                         <p class="text-gray-500 font-medium uppercase text-xs tracking-wider">Ship To</p>
-                                        <p class="text-gray-900 font-semibold mt-0.5"><%= order.fullname %></p>
+                                        <p class="text-gray-900 font-semibold mt-0.5 truncate max-w-[150px]"><%= order.fullname %></p>
                                     </div>
                                 </div>
-                                <div class="flex items-center gap-3">
-                                    <span class="text-xs font-mono text-gray-400">ORDER #<%= order._id.toString().slice(-6).toUpperCase() %></span>
+                                <div class="flex justify-between md:justify-end items-center gap-3 w-full md:w-auto mt-2 md:mt-0 pt-2 md:pt-0 border-t md:border-t-0 border-gray-100">
+                                    <span class="text-xs font-mono text-gray-400">#<%= order._id.toString().slice(-6).toUpperCase() %></span>
                                     <!-- Status Badge -->
                                     <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide
                                         <%= order.orderStatus === 'delivered' ? 'bg-green-100 text-green-700' : 
@@ -47,28 +46,37 @@
                             </div>
 
                             <!-- Order Products List -->
-                            <div class="p-6">
+                            <div class="p-4 sm:p-6">
                                 <% order.products.forEach((item)=>{ %>
-                                    <div class="flex gap-5 mb-5 last:mb-0">
+                                    <div class="flex flex-col sm:flex-row gap-4 sm:gap-5 mb-5 last:mb-0 border-b sm:border-b-0 border-gray-50 pb-4 sm:pb-0 last:border-0 last:pb-0">
                                         <!-- Product Image -->
-                                        <div class="w-20 h-20 flex-shrink-0 bg-[<%= item.product.bgcolor %>] rounded-lg flex items-center justify-center p-2 border border-gray-100">
-                                            <img class="w-full h-full object-contain" 
-                                                 src="data:image/<%= item.product.imgType %>;base64,<%= item.product.img.toString('base64') %>" 
-                                                 alt="<%= item.product.name %>">
+                                        <div class="flex items-center gap-4 sm:block">
+                                            <div class="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 bg-[<%= item.product.bgcolor %>] rounded-lg flex items-center justify-center p-2 border border-gray-100">
+                                                <img class="w-full h-full object-contain" 
+                                                     src="data:image/<%= item.product.imgType %>;base64,<%= item.product.img.toString('base64') %>" 
+                                                     alt="<%= item.product.name %>">
+                                            </div>
+                                            <!-- Mobile Only Title for alignment -->
+                                            <div class="sm:hidden flex-grow">
+                                                <h4 class="text-lg font-bold text-gray-800 leading-tight"><%= item.product.name %></h4>
+                                            </div>
                                         </div>
                                         
                                         <!-- Product Details -->
                                         <div class="flex-grow flex flex-col justify-center">
-                                            <h4 class="text-lg font-bold text-gray-800 leading-tight"><%= item.product.name %></h4>
+                                            <h4 class="hidden sm:block text-lg font-bold text-gray-800 leading-tight"><%= item.product.name %></h4>
                                             
-                                            <div class="flex items-center gap-4 mt-2 text-sm text-gray-500">
-                                                <span class="bg-gray-100 px-2 py-0.5 rounded text-gray-600">Qty: <%= item.quantity %></span>
-                                                <span>Price: ₹ <%= item.price %></span>
+                                            <div class="flex justify-between sm:justify-start items-center gap-4 mt-2 text-sm text-gray-500">
+                                                <div class="flex gap-4">
+                                                    <span class="bg-gray-100 px-2 py-0.5 rounded text-gray-600">Qty: <%= item.quantity %></span>
+                                                    <span>₹ <%= item.price %></span>
+                                                </div>
+                                                <p class="sm:hidden font-bold text-gray-900 text-lg">₹ <%= item.price * item.quantity %></p>
                                             </div>
                                         </div>
                                         
-                                        <!-- Item Total -->
-                                        <div class="flex items-center">
+                                        <!-- Item Total (Desktop) -->
+                                        <div class="hidden sm:flex items-center">
                                             <p class="font-bold text-gray-900 text-lg">₹ <%= item.price * item.quantity %></p>
                                         </div>
                                     </div>
@@ -76,7 +84,7 @@
                             </div>
 
                             <!-- Order Footer Actions -->
-                            <div class="bg-gray-50 px-6 py-3 border-t border-gray-100 flex justify-between items-center">
+                            <div class="bg-gray-50 px-4 sm:px-6 py-3 border-t border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                                 <div class="flex items-center gap-2 text-sm text-gray-500">
                                     <div class="w-2 h-2 rounded-full <%= order.paymentStatus === 'paid' ? 'bg-green-500' : 'bg-orange-500' %>"></div>
                                     Payment: <span class="font-medium text-gray-700 uppercase"><%= order.paymentMethod %></span>

@@ -11,25 +11,58 @@
 </head>
 
 <body class="font-['Google Sans']">
-    <nav class="w-full fixed top-0 left-0 px-5 py-3 z-50 flex justify-between items-center bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm transition-all duration-300">
-        <h3 class="font-['Pacifico'] text-2xl text-blue-600 hover:scale-105 transition-transform cursor-pointer"><a href="/shop">Baggy</a></h3>
-        <div class="flex items-center gap-6">
-            <a href="/shop" class="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors relative group">
-                Shop
-                <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full"></span>
-            </a>
-            <a href="/cart" class="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors relative group">
-                Cart
-                <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full"></span>
-            </a>
-            <a href="/profile" class="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors relative group">
-                My Account
-                <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full"></span>
-            </a>
-            <a href="/myorder" class="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors relative group">
-                My Orders
-                <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full"></span>
-            </a>
-            <a class="px-4 py-2 rounded-full bg-red-50 text-red-600 text-sm font-medium hover:bg-red-100 transition-colors" href="/logout">Logout</a>
+    <nav class="w-full fixed top-0 left-0 px-5 py-3 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm transition-all duration-300">
+        <div class="flex justify-between items-center relative">
+            <h3 class="font-['Pacifico'] text-2xl text-blue-600 hover:scale-105 transition-transform cursor-pointer"><a href="/shop">Baggy</a></h3>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center gap-6">
+                <a href="/shop" class="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors relative group">
+                    Shop
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full"></span>
+                </a>
+                <a href="/cart" class="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors relative group">
+                    Cart
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full"></span>
+                </a>
+                <a href="/profile" class="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors relative group">
+                    My Account
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full"></span>
+                </a>
+                <a href="/myorder" class="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors relative group">
+                    My Orders
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full"></span>
+                </a>
+                <a class="px-4 py-2 rounded-full bg-red-50 text-red-600 text-sm font-medium hover:bg-red-100 transition-colors" href="/logout">Logout</a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-btn" class="md:hidden text-gray-700 hover:text-blue-600 focus:outline-none">
+                <i class="ri-menu-line text-2xl"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden w-full absolute top-full left-0 bg-white border-b border-gray-100 shadow-lg py-4 px-5 flex-col gap-4">
+            <a href="/shop" class="block w-full text-base font-medium text-gray-700 hover:text-blue-600 transition-colors py-2 border-b border-gray-50">Shop</a>
+            <a href="/cart" class="block w-full text-base font-medium text-gray-700 hover:text-blue-600 transition-colors py-2 border-b border-gray-50">Cart</a>
+            <a href="/profile" class="block w-full text-base font-medium text-gray-700 hover:text-blue-600 transition-colors py-2 border-b border-gray-50">My Account</a>
+            <a href="/myorder" class="block w-full text-base font-medium text-gray-700 hover:text-blue-600 transition-colors py-2 border-b border-gray-50">My Orders</a>
+            <a href="/logout" class="block w-full text-base font-medium text-red-600 hover:text-red-700 transition-colors py-2">Logout</a>
         </div>
     </nav>
+    <script>
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+            menu.classList.toggle('flex');
+            const icon = this.querySelector('i');
+            if (menu.classList.contains('hidden')) {
+                icon.classList.remove('ri-close-line');
+                icon.classList.add('ri-menu-line');
+            } else {
+                icon.classList.remove('ri-menu-line');
+                icon.classList.add('ri-close-line');
+            }
+        });
+    </script>
