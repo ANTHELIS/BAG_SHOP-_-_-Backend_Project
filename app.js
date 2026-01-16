@@ -15,7 +15,7 @@ const flash = require("connect-flash");
 const usersRouter = require("./routes/usersRouter");
 const ownersRouter = require("./routes/ownersRouter");
 const productsRouter = require("./routes/productsRouter");
-const paymentRouter = require("./routes/paymentRouter");
+// const paymentRouter = require("./routes/paymentRouter");
 
 
 app.use(express.json());
@@ -33,7 +33,7 @@ app.set("view engine", "ejs");
 app.use("/", usersRouter);
 app.use("/owners", ownersRouter);
 app.use("/products", productsRouter);
-app.use("/payment", paymentRouter);
+// app.use("/payment", paymentRouter);
 
 
 

@@ -53,10 +53,10 @@ router.post('/admin/profile', isAdmin, upload.single('ownerPic'), async(req, res
 router.get('/admin/orders', isAdmin, async(req, res)=>{
     const owner = await ownerModel.findOne().select('orders').populate({
         path: 'orders',
-        populate: {
-            path: 'user',
-            path: 'products.product'
-        }
+        populate: [
+            { path: 'user' },
+            { path: 'products.product' }
+        ]
     })
     const orders = owner.orders;
     res.render('ownerMyOrder', {orders});

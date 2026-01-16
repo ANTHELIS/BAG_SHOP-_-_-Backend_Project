@@ -1,4 +1,4 @@
-const {validationResult, Result} = require('express-validator');
+const {validationResult} = require('express-validator');
 const bcrypt = require('bcrypt');
 const {generateToken} = require("../utils/generateToken");
 const userModel = require('../models/userModel');

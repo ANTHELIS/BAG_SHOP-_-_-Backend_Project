@@ -4,7 +4,7 @@ const dbgr = require("debug")("development:mongoose");
 
 function connectToDB () {
     mongoose.connect(`${config.get("MONGODB_URI")}/baggy`).then(()=>{
-        dbgr("Conneted to DB");
+        dbgr("Connected to DB");
     })
     .catch ((err)=>{
         dbgr(err);
