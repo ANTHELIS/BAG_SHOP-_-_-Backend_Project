@@ -1,10 +1,13 @@
 const express = require('express');
 const app = express();
+const dbgr = require("debug")("development:server");
+const config = require('config');
 const dotenv = require('dotenv')
 dotenv.config()
 const connectToDB = require('./config/db');
 connectToDB();
-const PORT = process.env.PORT || 3000;
+// Use environment variable first, then config, then default to 3000
+const PORT = process.env.PORT || (config.has("PORT") ? config.get("PORT") : null) || 3000;
 const cookieParser = require('cookie-parser');
 const path = require('path');
 const expressSession = require("express-session");
@@ -49,5 +52,6 @@ app.use((req, res, next) => {
 
 
 app.listen(PORT, ()=>{
+    dbgr(`Server is running on port ${PORT}`);
     console.log(`🚀 Server is running on port ${PORT}`);
 })
