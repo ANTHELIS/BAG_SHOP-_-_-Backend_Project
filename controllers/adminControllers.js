@@ -35,7 +35,7 @@ module.exports.loginOwner = async (req, res)=>{
         if(result){
           const token = generateToken(owner);
           res.cookie('token', token);
-          res.redirect("/owners/admin");
+          res.redirect("/owners/admin/products");
         }
         else{
           res.send("email or password is incorrect");

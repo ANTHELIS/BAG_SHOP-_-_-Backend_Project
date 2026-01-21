@@ -8,13 +8,13 @@ const { isAdmin } = require('../middlewares/isAdmin');
 
 router.post('/create', isAdmin, upload.single('image'), async (req, res)=>{
     try {
-        const { name, price, discount, bgcolor, panelcolor, textcolor } = req.body;
+        const { name, price, discount, bgcolor, panelcolor, textcolor, description, specification, warrantyInYear, highlights } = req.body;
         const imgType = path.extname(req.file.originalname) ;
-        const product = await productModel.create({ img: req.file.buffer, imgType, name, price, discount, bgcolor, panelcolor, textcolor });
+        const product = await productModel.create({ img: req.file.buffer, imgType, name, price, discount, bgcolor, panelcolor, textcolor , highlights, warrantyInYear, description, specification});
         const owner = await ownerModel.findOne({ email: req.owner.email });
         owner.products.push(product._id);
         await owner.save();
-        req.flash("success", "product created successfully");
+        req.flash("success", "Product Created Successfully");
         res.redirect('/owners/admin');
     } catch (err) {
         res.send(err);
@@ -25,9 +25,16 @@ router.get('/edit/:product_id', isAdmin, async (req, res)=>{
     const product = await productModel.findOne({ _id: req.params.product_id });
     res.render('editProduct', { product });
 })
-router.post('/edit/:product_id', isAdmin, async (req, res)=>{
-    const { name, price, discount, bgcolor, panelcolor, textcolor } = req.body;
-    await productModel.findOneAndUpdate({ _id: req.params.product_id }, { name, price, discount, bgcolor, panelcolor, textcolor });
+router.post('/edit/:product_id', isAdmin, upload.single('image'), async (req, res)=>{
+    const { name, price, discount, bgcolor, panelcolor, textcolor, description, specification, warrantyInYear, highlights } = req.body;
+    const updatedData = { name, price, discount, bgcolor, panelcolor, textcolor, description, specification, warrantyInYear, highlights };
+    if(req.file){
+        const imgType = path.extname(req.file.originalname);
+        updatedData.imgType = imgType;
+        updatedData.img = req.file.buffer;
+    }
+    await productModel.findOneAndUpdate({ _id: req.params.product_id }, updatedData);
+    req.flash("success", "Product Updated Successfully")
     res.redirect('/owners/admin/products');
 })
 router.get('/delete/:product_id', isAdmin, async (req, res)=>{

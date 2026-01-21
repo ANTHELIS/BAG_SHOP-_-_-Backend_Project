@@ -83,18 +83,20 @@
                 <!-- Main Content -->
                 <div class="w-full md:w-[80%] flex flex-col gap-5 pl-0 md:pl-8">
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6">
                         <% products.forEach((product)=>{ %>
                             <div class="group relative bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col h-full">
                                 <!-- Image Section -->
-                                <div class="w-full h-64 flex items-center justify-center bg-[<%= product.bgcolor %>] relative overflow-hidden">
-                                    <img class="h-48 object-contain drop-shadow-md group-hover:scale-110 transition-transform duration-500" 
-                                         src="data:image/<%=product.imgType%>;base64,<%= product.img.toString('base64') %>"
-                                         alt="<%= product.name %>">
-                                </div>
+                                 <a href="/product/<%= product._id %>">
+                                     <div class="w-full h-32 sm:h-64 flex items-center justify-center bg-[<%= product.bgcolor %>] relative overflow-hidden">
+                                         <img class="h-24 sm:h-48 object-contain drop-shadow-md group-hover:scale-110 transition-transform duration-500" 
+                                              src="data:image/<%=product.imgType%>;base64,<%= product.img.toString('base64') %>"
+                                              alt="<%= product.name %>">
+                                     </div>
+                                 </a>
                                 
                                 <!-- Details Section -->
-                                <div class="p-4 flex flex-col flex-grow bg-[<%= product.panelcolor %>] text-[<%= product.textcolor %>] transition-colors">
+                                <div class="p-3 sm:p-4 flex flex-col flex-grow bg-[<%= product.panelcolor %>] text-[<%= product.textcolor %>] transition-colors">
                                     <div class="flex justify-between items-start mb-2">
                                         <h3 class="text-lg font-semibold leading-tight truncate pr-2" title="<%= product.name %>"><%= product.name %></h3>
                                         <a class="w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-full bg-white text-gray-800 shadow-sm hover:bg-black hover:text-white transition-all duration-200" href="/addtocart/<%=product._id%>">

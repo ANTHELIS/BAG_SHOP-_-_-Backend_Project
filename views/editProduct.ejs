@@ -1,5 +1,12 @@
 <%- include('./partials/headerOwner') %>
-    
+    <% if(typeof success !== 'undefined' && success.length>0){ %>
+        <div class="fixed top-24 left-1/2 -translate-x-1/2 z-50 p-4 rounded-lg bg-green-500 shadow-lg animate-bounce">
+            <span class="inline-block text-white font-medium">
+                <%= success %>
+            </span>
+        </div>
+        <% } %>
+
             <div class="min-h-screen bg-gray-50 pt-24 pb-10 px-4 sm:px-10 flex justify-center">
                 <div class="w-full max-w-4xl bg-white rounded-2xl shadow-lg overflow-hidden">
                     <div class="bg-gray-900 px-4 md:px-8 py-6 border-b border-gray-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -8,28 +15,47 @@
                             <i class="ri-arrow-left-line"></i> Back to Dashboard
                         </a>
                     </div>
-
-                    <form autocomplete="off" action="/products/edit/<%= product._id %>" method="post" class="p-4 md:p-8">
+                    
+                    <form autocomplete="off" action="/products/edit/<%= product._id %>" method="post" enctype="multipart/form-data" class="p-4 md:p-8">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <!-- Left Column: Product Details -->
                             <div class="space-y-6">
                                 <h3 class="text-lg font-semibold text-gray-800 border-b pb-2">Product Information</h3>
                                 
                                 <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Product Image (Upload to change)</label>
+                                    <div class="flex items-center justify-center w-full">
+                                        <label class="flex flex-col items-center justify-center w-full h-50 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors">
+                                            <% if (product.img) { %>
+                                                <img class="h-48 object-contain drop-shadow-md group-hover:scale-110 transition-transform duration-500" 
+                                                    src="data:image/<%=product.imgType%>;base64,<%= product.img.toString('base64') %>"
+                                                    alt="<%= product.name %>">
+                                            <% } else{ %>
+                                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                                    <i class="ri-upload-cloud-2-line text-3xl text-gray-400 mb-2"></i>
+                                                    <p class="text-sm text-gray-500"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                                                </div>
+                                            <% } %>
+                                            <input name="image" type="file" class="hidden" accept="image/*" onchange="previewImage(event)" />
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
-                                    <input name="name" type="text" placeholder="Product Name" value="<%= product.name %>"
+                                    <input name="name" type="text" placeholder="e.g. Classic Leather Tote" value="<%= product.name %>"
                                         class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
                                 </div>
 
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Price (₹)</label>
-                                        <input name="price" type="number" placeholder="Product Price" value="<%= product.price %>"
+                                        <input name="price" type="number" placeholder="0.00" value="<%= product.price %>"
                                             class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Discount (₹)</label>
-                                        <input name="discount" type="number" placeholder="Discount Price" value="<%= product.discount %>"
+                                        <input name="discount" type="number" placeholder="0.00" value="<%= product.discount %>"
                                             class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
                                     </div>
                                 </div>
@@ -38,11 +64,12 @@
                             <!-- Right Column: Styling Details -->
                             <div class="space-y-6">
                                 <h3 class="text-lg font-semibold text-gray-800 border-b pb-2">Visual Styling</h3>
+                                <p class="text-sm text-gray-500 mb-4">Customize how the product card looks in the shop.</p>
                                 
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Background Color (Hex)</label>
                                     <div class="flex gap-2">
-                                        <input name="bgcolor" type="text" placeholder="Background Color" value="<%= product.bgcolor %>"
+                                        <input name="bgcolor" type="text" placeholder="#FFFFFF" value="<%= product.bgcolor %>"
                                             class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
                                         <div class="w-10 h-10 rounded border border-gray-200 shadow-sm" style="background-color: <%= product.bgcolor %>;"></div>
                                     </div>
@@ -51,7 +78,7 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Panel Color (Hex)</label>
                                     <div class="flex gap-2">
-                                        <input name="panelcolor" type="text" placeholder="Panel Color" value="<%= product.panelcolor %>"
+                                        <input name="panelcolor" type="text" placeholder="#F3F4F6" value="<%= product.panelcolor %>"
                                             class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
                                         <div class="w-10 h-10 rounded border border-gray-200 shadow-sm" style="background-color: <%= product.panelcolor %>;"></div>
                                     </div>
@@ -60,23 +87,117 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Text Color (Hex)</label>
                                     <div class="flex gap-2">
-                                        <input name="textcolor" type="text" placeholder="Text Color" value="<%= product.textcolor %>"
+                                        <input name="textcolor" type="text" placeholder="#1F2937" value="<%= product.textcolor %>"
                                             class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
                                         <div class="w-10 h-10 rounded border border-gray-200 shadow-sm" style="background-color: <%= product.textcolor %>;"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
+
+                        <!-- New Sections for Details -->
+                        <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8 border-t border-gray-100 pt-8">
+                            
+                            <!-- Description & Specifications -->
+                            <div class="space-y-6">
+                                <h3 class="text-lg font-semibold text-gray-800 border-b pb-2">Product Details</h3>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                                    <textarea name="description" rows="4" placeholder="Detailed product description..."
+                                        class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all resize-none"><%= product.description %></textarea>
+                                </div>
+
+                                <div>
+                                   <label class="block text-sm font-medium text-gray-700 mb-1">Specifications</label>
+                                   <div class="grid grid-cols-2 gap-3">
+                                       <input name="specification[modelName]" type="text" placeholder="Model Name" value="<%= product.specification ? product.specification.modelName : '' %>" class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-blue-500 outline-none text-sm">
+                                       <input name="specification[color]" type="text" placeholder="Color" value="<%= product.specification ? product.specification.color : '' %>" class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-blue-500 outline-none text-sm">
+                                       <input name="specification[material]" type="text" placeholder="Material" value="<%= product.specification ? product.specification.material : '' %>" class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-blue-500 outline-none text-sm">
+                                       <input name="specification[categoryType]" type="text" placeholder="Type" value="<%= product.specification ? product.specification.categoryType : '' %>" class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-blue-500 outline-none text-sm">
+                                       <input name="specification[capacity]" type="text" placeholder="Capacity" value="<%= product.specification ? product.specification.capacity : '' %>" class="col-span-2 w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-blue-500 outline-none text-sm">
+                                   </div>
+                                </div>
+                            </div>
+
+                            <!-- Highlights & Warranty -->
+                            <div class="space-y-6">
+                                <h3 class="text-lg font-semibold text-gray-800 border-b pb-2">Usage & Highlights</h3>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Warranty (Years)</label>
+                                    <input name="warrantyInYear" type="number" placeholder="1" value="<%= product.warrantyInYear %>" min="0"
+                                        class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Highlights (Max 6)</label>
+                                    <div id="highlights-container" class="space-y-2">
+                                        <% if(product.highlights && product.highlights.length > 0) { %>
+                                            <% product.highlights.forEach(function(highlight, index) { %>
+                                                <div class="highlight-item flex gap-2">
+                                                    <input name="highlights[]" type="text" placeholder="Highlight <%= index + 1 %>" value="<%= highlight %>"
+                                                        class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+                                                    <% if(index > 0) { %>
+                                                    <button type="button" onclick="removeHighlight(this)" class="px-3 py-2 text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 rounded-lg transition-colors">
+                                                        <i class="ri-delete-bin-line"></i>
+                                                    </button>
+                                                    <% } %>
+                                                </div>
+                                            <% }) %>
+                                        <% } else { %>
+                                            <div class="highlight-item flex gap-2">
+                                                 <input name="highlights[]" type="text" placeholder="Highlight 1"
+                                                    class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+                                            </div>
+                                        <% } %>
+                                    </div>
+                                     <button type="button" onclick="addHighlight()" class="mt-3 text-sm text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1 transition-colors">
+                                        <i class="ri-add-circle-line text-lg"></i> Add Highlight
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="mt-10 pt-6 border-t border-gray-100 flex justify-end gap-4">
                             <a href="/owners/admin/products" class="px-6 py-3 bg-gray-100 text-gray-700 font-semibold rounded-lg hover:bg-gray-200 transition-colors">
                                 Cancel
                             </a>
-                            <button class="px-8 py-3 bg-yellow-600 hover:bg-yellow-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200" type="submit">
+                            <button class="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200" type="submit">
                                 Update Product
                             </button>
                         </div>
                     </form>
                 </div>
             </div>
-            <%- include('./partials/footer') %>
+
+<script>
+    let highlightCount = <%= (product.highlights && product.highlights.length > 0) ? product.highlights.length : 1 %>;
+
+    function addHighlight() {
+        if(highlightCount >= 6) {
+            alert('Maximum 6 highlights allowed!');
+            return;
+        }
+        
+        highlightCount++;
+        const container = document.getElementById('highlights-container');
+        const div = document.createElement('div');
+        div.className = 'highlight-item flex gap-2';
+        div.innerHTML = `
+            <input type="text" name="highlights[]" placeholder="Highlight ${highlightCount}" required
+                class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+            <button type="button" onclick="removeHighlight(this)" class="px-3 py-2 text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 rounded-lg transition-colors">
+                <i class="ri-delete-bin-line"></i>
+            </button>
+        `;
+        container.appendChild(div);
+    }
+
+    function removeHighlight(btn) {
+        btn.parentElement.remove();
+        highlightCount--;
+    }
+</script>
+
+            <%- include('./partials/ownerFooter') %>

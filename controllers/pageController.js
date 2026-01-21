@@ -141,3 +141,10 @@ module.exports.myOrder = async(req, res)=>{
     const orders = user.orders;
     res.render('userMyOrders', { orders });
 }
+
+module.exports.productDes = async(req, res)=>{
+    const product = await productModel.findOne({_id: req.params.product_id});
+    res.render('productDes', {product});
+
+
+}

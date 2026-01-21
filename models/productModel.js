@@ -12,6 +12,23 @@ const productSchema = mongoose.Schema({
     bgcolor: String,
     panelcolor: String,
     textcolor: String,
+    highlights: {
+        type: Array,
+        minlength: 1,
+        maxlength: 6
+    },
+    warrantyInYear: {
+        type: Number,
+        default: 1
+    },
+    description: String,
+    specification: {
+        modelName: String,
+        color: String,
+        material: String,
+        categoryType: String,
+        capacity: String
+    },
     createdAt: {
         type: Date,
         default: Date.now()

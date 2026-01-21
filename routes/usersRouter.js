@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const registerValidation = require("../middlewares/registerValidation");
 const {registerUser, loginUser, logout} = require('../controllers/authController');
-const {userRegisterPage, userLoginPage, shopPage, addToCart, cart, deleteFromCart, addQuantity, decQuantity, orderCheckout, placeOrder, myOrder} = require("../controllers/pageController");
+const {userRegisterPage, userLoginPage, shopPage, addToCart, cart, deleteFromCart, addQuantity, decQuantity, orderCheckout, placeOrder, myOrder, productDes} = require("../controllers/pageController");
 const { isLoggedIn } = require('../middlewares/isLoggedIn');
 const userModel = require('../models/userModel');
 const path = require('path');
@@ -25,14 +25,27 @@ router.get("/myorder", isLoggedIn, myOrder);
 
 
 
-router.get("/profile", isLoggedIn, (req, res)=>{
-    const user = req.user
+router.get("/profile", isLoggedIn, async(req, res)=>{
+    const user = await userModel.findOne({ email: req.user.email });
     res.render('userProfile', { user });
 });
+
+router.get('/product/:product_id', isLoggedIn, productDes);
+
 router.post("/profile/edit", isLoggedIn, upload.single('userPic'), async (req, res)=>{
-    const imgType = path.extname(req.file.originalname);
     const { fullname, flat, area, city, state, pincode, contact } = req.body;
-    const user = await userModel.findOneAndUpdate({email: req.user.email}, {fullname, imgType, img: req.file.buffer, address: { flat, area, city, state, pincode, contact } });
+    const updatedData = { 
+        fullname, 
+        address: {
+            flat, area, city, state, pincode, contact
+        }
+    };
+    if(req.file){
+        const imgType = path.extname(req.file.originalname);
+        updatedData.imgType = imgType;
+        updatedData.img = req.file.buffer;
+    }
+    const user = await userModel.findOneAndUpdate({email: req.user.email}, updatedData);
     res.redirect('/profile');
 });
 

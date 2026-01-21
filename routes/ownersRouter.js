@@ -30,7 +30,8 @@ router.get('/admin', isAdmin, (req, res)=>{
 
 router.get('/admin/products', isAdmin, async (req, res)=>{
     const owner = await ownerModel.findOne({email: req.owner.email}).select("-password").populate('products');
-    res.render("ownerProductsPanel", {owner});
+    const success = req.flash("success");
+    res.render("ownerProductsPanel", {owner, success});
 })
 
 router.get('/admin/profile', isAdmin, (req, res)=>{
@@ -68,6 +69,9 @@ router.post('/admin/ordersUpdate/:order_id', isAdmin, async(req, res)=>{
 
 
 })
+
+
+
 
 
 module.exports = router;
