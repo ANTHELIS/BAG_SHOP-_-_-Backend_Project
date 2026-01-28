@@ -12,7 +12,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2">
             <!-- Product Image Section -->
             <div class="h-[50vh] md:h-[70vh] w-full flex items-center justify-center p-8 md:p-16 relative overflow-hidden" 
-                 style="background-color: <%= product.bgcolor %>;">
+                style="background-color: <%= product.bgcolor %>;">
                 <img class="w-full h-full object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500 ease-out"
                      src="data:image/<%= product.imgType %>;base64,<%= product.img.toString('base64') %>"
                      alt="<%= product.name %>"

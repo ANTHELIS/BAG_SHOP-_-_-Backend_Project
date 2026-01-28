@@ -7,6 +7,10 @@ const { isLoggedIn } = require('../middlewares/isLoggedIn');
 const userModel = require('../models/userModel');
 const path = require('path');
 const upload = require('../config/multerConfig');
+const profileUpdateFieldsValidator = require('../middlewares/profileUpdaterValidation');
+const { validationResult } = require('express-validator');
+
+
 
 router.post('/register', registerValidation, registerUser);
 router.post('/login', loginUser);
@@ -32,7 +36,8 @@ router.get("/profile", isLoggedIn, async(req, res)=>{
 
 router.get('/product/:product_id', isLoggedIn, productDes);
 
-router.post("/profile/edit", isLoggedIn, upload.single('userPic'), async (req, res)=>{
+router.post("/profile/edit", isLoggedIn, upload.single('userPic'), profileUpdateFieldsValidator, async (req, res)=>{
+    
     const { fullname, flat, area, city, state, pincode, contact } = req.body;
     const updatedData = { 
         fullname, 
