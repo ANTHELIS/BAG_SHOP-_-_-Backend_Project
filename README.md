@@ -68,7 +68,7 @@ Before you begin, ensure you have the following installed:
 
 ### 1. Clone the Repository
 ```bash
-git clone <repository-url>
+git clone https://github.com/ANTHELIS/BAG_SHOP-_-_-Backend_Project.git
 cd Bag_Shop(Backend\ Project)
 ```
 
